@@ -1,5 +1,5 @@
 const canvas = document.getElementById('canvas').getContext('2d');
-const cells = [];
+let cells = [];
 canvas.strokeStyle = '#101010';
 canvas.fillStyle = '#202835';
 
@@ -26,4 +26,41 @@ const startGame = () => {
   .forEach(cell => {
       cells[cell[0]][cell[1]] = 1;
   });
+
+  updateCells();
+}
+
+const updateCells = () => {
+  let result = [];
+  
+  // amount of alive neighbors for a cell
+  const _enumNeighbours = (x, y) => {
+      let amount = 0;
+      
+      const _isCellFilled = (x, y) => cells[x] && cells[x][y];
+      
+      if (_isCellFilled(x-1, y-1)) amount++;
+      if (_isCellFilled(x, y-1)) amount++;
+      if (_isCellFilled(x+1, y-1)) amount++;
+      if (_isCellFilled(x-1, y)) amount++;
+      if (_isCellFilled(x+1, y)) amount++;
+      if (_isCellFilled(x-1, y+1)) amount++;
+      if (_isCellFilled(x, y+1)) amount++;
+      if (_isCellFilled(x+1, y+1)) amount++;
+      return amount;
+  }
+  
+  cells.forEach((row, x) => {
+      result[x] = [];
+      row.forEach((cell, y) => {
+          let alive = 0;
+          let count = _enumNeighbours(x, y);
+           cell > 0 ?
+              alive = count === 2 || count === 3 ? 1 : 0 :
+              alive = count === 3 ? 1 : 0
+          result[x][y] = alive;
+      });
+  });
+  
+  cells = result;
 }
