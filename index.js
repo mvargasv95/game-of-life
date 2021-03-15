@@ -1,13 +1,26 @@
-const canvas = document.getElementById('canvas').getContext('2d');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 let cells = [];
-canvas.strokeStyle = '#101010';
-canvas.fillStyle = '#202835';
+ctx.strokeStyle = '#101010';
+ctx.fillStyle = '#202835';
 
 document.getElementById('start').addEventListener('click', () => {
   startGame();
 });
 
-const startGame = () => {
+document.getElementById('end').addEventListener('click', () => {
+  endGame();
+});
+
+// helpers
+const clearCanvas = () => ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+const _isCellFilled = (x, y) => cells[x] && cells[x][y];
+
+const startGame = () => {;
+  cells = [];
+  clearCanvas();
+  cells = [];
   for (let i = 0; i < 64; i++) {
     cells[i] = [];
     for (let j = 0; j < 64; j++) {
@@ -24,7 +37,7 @@ const startGame = () => {
     [60, 51],[61,51],[62,51],
   ]
   .forEach(cell => {
-      cells[cell[0]][cell[1]] = 1;
+    cells[cell[0]][cell[1]] = 1;
   });
 
   updateCells();
@@ -35,19 +48,17 @@ const updateCells = () => {
   
   // amount of alive neighbors for a cell
   const _enumNeighbours = (x, y) => {
-      let amount = 0;
+      let neighbors = 0;
       
-      const _isCellFilled = (x, y) => cells[x] && cells[x][y];
-      
-      if (_isCellFilled(x-1, y-1)) amount++;
-      if (_isCellFilled(x, y-1)) amount++;
-      if (_isCellFilled(x+1, y-1)) amount++;
-      if (_isCellFilled(x-1, y)) amount++;
-      if (_isCellFilled(x+1, y)) amount++;
-      if (_isCellFilled(x-1, y+1)) amount++;
-      if (_isCellFilled(x, y+1)) amount++;
-      if (_isCellFilled(x+1, y+1)) amount++;
-      return amount;
+      if (_isCellFilled(x-1, y-1)) neighbors++;
+      if (_isCellFilled(x, y-1)) neighbors++;
+      if (_isCellFilled(x+1, y-1)) neighbors++;
+      if (_isCellFilled(x-1, y)) neighbors++;
+      if (_isCellFilled(x+1, y)) neighbors++;
+      if (_isCellFilled(x-1, y+1)) neighbors++;
+      if (_isCellFilled(x, y+1)) neighbors++;
+      if (_isCellFilled(x+1, y+1)) neighbors++;
+      return neighbors;
   }
   
   cells.forEach((row, x) => {
@@ -68,13 +79,18 @@ const updateCells = () => {
 
 
 const draw = () => {
-  canvas.clearRect(0, 0, 1512, 512);
+  clearCanvas();
   cells.forEach((row, x) => {
       row.forEach((cell, y) => {
-          canvas.beginPath();
-          canvas.rect(x * 8, y * 8, 8, 8);
-          cell ? canvas.fill() : canvas.stroke();
+          ctx.beginPath();
+          ctx.rect(x * 8, y * 8, 8, 8);
+          cell ? ctx.fill() : ctx.stroke();
       });
   });
-  setTimeout(() => updateCells(), 70);
-}
+  setTimeout(() => updateCells(), 50);
+};
+
+const endGame = () => {
+  clearCanvas();
+  cells = [];
+};
