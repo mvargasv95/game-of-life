@@ -29,13 +29,15 @@ button {
 }
 
 .canvas-div {
-  padding-top: 30px;
-  width: 80%;
+  max-height: 70vh;
+  margin-top: 30px;
+  width: 90%;
+  background-color: red;
   align-self: center;
 }
 
 #canvas {
-  max-height: 75vh;
+  height: 100%;
   width: 100%;
   background-color: #fff;
 }
