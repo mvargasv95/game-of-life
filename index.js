@@ -63,4 +63,18 @@ const updateCells = () => {
   });
   
   cells = result;
+  draw();
+}
+
+
+const draw = () => {
+  canvas.clearRect(0, 0, 1512, 512);
+  cells.forEach((row, x) => {
+      row.forEach((cell, y) => {
+          canvas.beginPath();
+          canvas.rect(x * 8, y * 8, 8, 8);
+          cell ? canvas.fill() : canvas.stroke();
+      });
+  });
+  setTimeout(() => updateCells(), 70);
 }
